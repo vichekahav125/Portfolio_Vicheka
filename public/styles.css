@@ -362,20 +362,33 @@ a:hover {
     background-color: var(--surface);
 }
 
+.experience .section-title {
+    margin-bottom: var(--spacing-sm);
+}
+
+.experience-intro {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto var(--spacing-2xl);
+    color: var(--text-tertiary);
+    font-size: 1.05rem;
+}
+
 .experience-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--spacing-xl);
 }
 
 .experience-card {
-    background-color: var(--background);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
     padding: var(--spacing-lg);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     position: relative;
     overflow: hidden;
     transition: var(--transition);
+    min-height: auto;
 }
 
 .experience-card::before {
@@ -391,34 +404,67 @@ a:hover {
 .experience-card:hover {
     border-color: var(--primary-light);
     box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
-    transform: translateY(-5px);
+    transform: translateY(-6px);
 }
 
 .card-number {
-    font-size: 3rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: var(--primary-light);
-    opacity: 0.2;
-    margin-bottom: var(--spacing-md);
+    opacity: 0.26;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1;
 }
 
 .experience-card h3 {
     color: var(--accent-light);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    font-size: 1.25rem;
+    line-height: 1.35;
 }
 
 .card-type {
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
+    display: inline-block;
+    font-size: 0.84rem;
+    color: #dbeafe;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-transform: none;
+    letter-spacing: 0.2px;
     margin-bottom: var(--spacing-md);
+    padding: 0.3rem 0.65rem;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.08);
 }
 
 .experience-card p {
     color: var(--text-secondary);
     line-height: 1.7;
+}
+
+.experience-meta {
+    margin-bottom: 0.45rem;
+    color: #d6e2f5 !important;
+    font-size: 0.96rem;
+}
+
+.experience-meta strong {
+    color: #e8f2ff;
+}
+
+.experience-tasks {
+    margin: 0.6rem 0 0;
+    padding-left: 1.15rem;
+    color: var(--text-secondary);
+}
+
+.experience-tasks li {
+    margin-bottom: 0.48rem;
+    line-height: 1.65;
+}
+
+.experience-tasks li:last-child {
+    margin-bottom: 0;
 }
 
 /* ==================== CONTACT SECTION ==================== */
@@ -574,6 +620,12 @@ a:hover {
 
     .experience-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .experience-intro {
+        margin-bottom: var(--spacing-xl);
+        font-size: 1rem;
     }
 
     .contact-methods {
@@ -631,5 +683,9 @@ a:hover {
 
     .card-number {
         font-size: 2rem;
+    }
+
+    .experience-card {
+        min-height: auto;
     }
 }

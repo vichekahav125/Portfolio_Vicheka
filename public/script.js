@@ -206,31 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     createProgressBar();
 
-    // ==================== TEXT REVEAL EFFECT ====================
-    const revealText = (element) => {
-        const text = element.textContent;
-        element.textContent = '';
-        
-        [...text].forEach((char, index) => {
-            const span = document.createElement('span');
-            span.textContent = char;
-            span.style.opacity = '0';
-            span.style.display = 'inline-block';
-            span.style.animation = `fadeIn 0.5s ease forwards`;
-            span.style.animationDelay = `${index * 0.02}s`;
-            element.appendChild(span);
-        });
-    };
-
-    // Apply reveal effect to section titles
-    const sectionTitles = document.querySelectorAll('.section-title');
-    sectionTitles.forEach(title => {
-        const originalText = title.textContent;
-        title.addEventListener('mouseenter', () => {
-            revealText(title);
-        });
-    });
-
     // ==================== FORM SUBMISSION HANDLING ====================
     // Example: if you add a contact form later
     const handleFormSubmit = (e) => {
