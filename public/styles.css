@@ -492,11 +492,16 @@ a {
     margin-top: 1rem;
 }
 
-.skills-grid,
-.contact-methods {
+.skills-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.3rem;
+}
+
+.contact-methods {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 0.9rem;
 }
 
 .skills-column,
@@ -509,11 +514,24 @@ a {
     box-shadow: 0 10px 20px rgba(56, 90, 166, 0.05);
 }
 
+.contact-card {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+    border-radius: 14px;
+}
+
 .skills-column h3,
 .contact-card h3,
 .experience-card h3 {
     color: var(--ink);
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.55rem;
+}
+
+.contact-card p {
+    margin: 0 0 0.28rem;
+    font-size: 0.95rem;
 }
 
 .skill-list {
@@ -579,12 +597,14 @@ a {
 
 .contact-link {
     display: inline-block;
-    margin-top: 0.7rem;
-    padding: 0.5rem 0.95rem;
+    margin-top: 0.32rem;
+    align-self: flex-start;
+    padding: 0.42rem 0.82rem;
     border-radius: var(--radius-pill);
     background: var(--brand);
     color: #fff;
     font-weight: 700;
+    font-size: 0.92rem;
 }
 
 .footer {
@@ -686,12 +706,23 @@ a {
         transform: translateY(-8px) rotate(-45deg);
     }
 
-    .skills-grid,
-    .contact-methods {
+    .skills-grid {
         grid-template-columns: 1fr;
     }
 
     .about-meta {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 860px) {
+    .contact-methods {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .contact-methods {
         grid-template-columns: 1fr;
     }
 }
