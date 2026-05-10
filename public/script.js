@@ -1,312 +1,193 @@
-// ==================== NAVIGATION FUNCTIONALITY ====================
-document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
-    const navLinks = document.querySelectorAll('.nav-link');
+document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("navMenu");
+    const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+    const navbar = document.querySelector(".navbar");
+    const langButtons = Array.from(document.querySelectorAll(".lang-btn[data-lang]"));
 
-    // Toggle mobile menu
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-    });
-
-    // Close menu when a link is clicked
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            // Update active state
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            // Close mobile menu
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-        });
-    });
-
-    // Active link on scroll
-    window.addEventListener('scroll', () => {
-        let current = '';
-        const sections = document.querySelectorAll('section');
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (scrollY >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').slice(1) === current) {
-                link.classList.add('active');
-            }
-        });
-    });
-
-    // ==================== SCROLL ANIMATIONS ====================
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
+    const translations = {
+        en: {
+            navHome: "Home",
+            navAbout: "About",
+            navSkills: "Skills",
+            navExperience: "Experience",
+            navContact: "Contact",
+            talkBtn: "Let's Talk",
+            heroKicker: "WELCOME TO MY WORLD",
+            heroTitle: "Hi, I'm <span class=\"hero-name\">VICHEKA</span><br>A Student at PNC",
+            heroTagline: "I passionated about Front-End Developer and QA testing.",
+            heroProjects: "My Projects",
+            heroTalk: "Let's Talk",
+            aboutKicker: "MY BIOGRAPHY",
+            aboutHeading: "Who is <span class=\"hero-name\">VICHEKA</span>?",
+            aboutBody: "She is a student who likes technology and coding. She likes learning new things. She is responsible, curious, and always wants to improve herself by practicing and studying. She can communicate well and works seriously in interviews and team activities.",
+            aboutYears: "0+",
+            aboutYearsLabel: "Years Experience",
+            aboutEduLabel: "Education",
+            aboutEduValue: "PNC 2026",
+            aboutAvailLabel: "Availability",
+            aboutAvailValue: "Freelance & Full-time",
+            aboutCvBtn: "Download CV",
+            skillsTitle: "My Skills",
+            softSkills: "Soft Skills",
+            hardSkills: "Hard Skills",
+            experienceTitle: "Full Experience",
+            experienceIntro: "School projects with role-based responsibilities across development, QA, deployment, automation, and UX/UI design.",
+            contactTitle: "Get In Touch",
+            contactIntro: "Feel free to reach out to me for any opportunities or just to say hello!",
+            phoneTitle: "Phone",
+            callMe: "Call Me",
+            telegramTitle: "Telegram",
+            msgTelegram: "Message on Telegram",
+            educationTitle: "Education",
+            educationRole: "Web Development Student",
+            learnMore: "Learn More",
+            footerBuilt: "Built with HTML, CSS & JavaScript"
+        },
+        km: {
+            navHome: "ទំព័រដើម",
+            navAbout: "អំពីខ្ញុំ",
+            navSkills: "ជំនាញ",
+            navExperience: "បទពិសោធន៍",
+            navContact: "ទំនាក់ទំនង",
+            talkBtn: "មកនិយាយគ្នា",
+            heroKicker: "ស្វាគមន៍មកកាន់ពិភពលោករបស់ខ្ញុំ",
+            heroTitle: "សួស្តី ខ្ញុំឈ្មោះ <span class=\"hero-name\">VICHEKA</span><br>ជានិស្សិតនៅ PNC",
+            heroTagline: "ខ្ញុំមានចំណង់ចំណូលចិត្តលើ Front-End Development និង QA Testing។",
+            heroProjects: "គម្រោងរបស់ខ្ញុំ",
+            heroTalk: "មកនិយាយគ្នា",
+            aboutKicker: "ប្រវត្តិរូបរបស់ខ្ញុំ",
+            aboutHeading: "តើ <span class=\"hero-name\">VICHEKA</span> ជានរណា?",
+            aboutBody: "នាងជានិស្សិតដែលចូលចិត្តបច្ចេកវិទ្យា និងការសរសេរកូដ។ នាងចូលចិត្តរៀនអ្វីថ្មីៗជានិច្ច។ នាងមានការទទួលខុសត្រូវ មានចិត្តចង់ដឹងចង់ឃើញ និងតែងតែចង់អភិវឌ្ឍខ្លួនឯងតាមរយៈការអនុវត្ត និងការសិក្សា។ នាងអាចទំនាក់ទំនងបានល្អ ហើយធ្វើការយ៉ាងម៉ត់ចត់ក្នុងការសម្ភាសន៍ និងសកម្មភាពការងារជាក្រុម។",
+            aboutYears: "0+",
+            aboutYearsLabel: "ឆ្នាំបទពិសោធន៍",
+            aboutEduLabel: "ការអប់រំ",
+            aboutEduValue: "PNC 2026",
+            aboutAvailLabel: "ស្ថានភាពការងារ",
+            aboutAvailValue: "Freelance និង Full-time",
+            aboutCvBtn: "ទាញយក CV",
+            skillsTitle: "ជំនាញរបស់ខ្ញុំ",
+            softSkills: "ជំនាញទន់",
+            hardSkills: "ជំនាញបច្ចេកទេស",
+            experienceTitle: "បទពិសោធន៍ពេញលេញ",
+            experienceIntro: "គម្រោងសាលាដែលមានតួនាទីខុសៗគ្នា រួមមានការអភិវឌ្ឍន៍ QA ការដំឡើងប្រព័ន្ធ ស្វ័យប្រវត្តិកម្ម និង UX/UI Design។",
+            contactTitle: "ទាក់ទងមកខ្ញុំ",
+            contactIntro: "អាចទាក់ទងមកខ្ញុំបានគ្រប់ពេល សម្រាប់ឱកាសការងារ ឬសួរសុខទុក្ខ។",
+            phoneTitle: "ទូរស័ព្ទ",
+            callMe: "ហៅខ្ញុំ",
+            telegramTitle: "តេឡេក្រាម",
+            msgTelegram: "ផ្ញើសារតាម Telegram",
+            educationTitle: "ការអប់រំ",
+            educationRole: "និស្សិតអភិវឌ្ឍន៍វេបសាយ",
+            learnMore: "អានបន្ថែម",
+            footerBuilt: "បង្កើតដោយ HTML, CSS និង JavaScript"
+        }
     };
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+    const applyLanguage = (lang) => {
+        const selected = translations[lang] ? lang : "en";
+        const dict = translations[selected];
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+            const key = element.getAttribute("data-i18n");
+            if (key && dict[key]) {
+                element.textContent = dict[key];
             }
         });
-    }, observerOptions);
 
-    // Observe cards and elements
-    const cards = document.querySelectorAll('.experience-card, .contact-card, .skills-column');
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'all 0.6s ease forwards';
-        observer.observe(card);
-    });
-
-    // ==================== SMOOTH SCROLL ====================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+        document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+            const key = element.getAttribute("data-i18n-html");
+            if (key && dict[key]) {
+                element.innerHTML = dict[key];
             }
+        });
+
+        langButtons.forEach((button) => {
+            button.classList.toggle("active", button.dataset.lang === selected);
+        });
+
+        document.documentElement.lang = selected;
+        localStorage.setItem("portfolioLang", selected);
+    };
+
+    langButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const selectedLang = button.dataset.lang || "en";
+            applyLanguage(selectedLang);
         });
     });
 
-    // ==================== NAVBAR BACKGROUND ON SCROLL ====================
-    const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(15, 23, 42, 0.98)';
-            navbar.style.backdropFilter = 'blur(10px)';
-        } else {
-            navbar.style.background = 'rgba(15, 23, 42, 0.95)';
-        }
-    });
+    const initialLanguage = localStorage.getItem("portfolioLang") || "en";
+    applyLanguage(initialLanguage);
 
-    // ==================== PARALLAX EFFECT ====================
-    const profileImg = document.querySelector('.profile-img');
-    if (profileImg) {
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.scrollY;
-            profileImg.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+    if (hamburger && navMenu) {
+        hamburger.addEventListener("click", () => {
+            const expanded = hamburger.getAttribute("aria-expanded") === "true";
+            hamburger.setAttribute("aria-expanded", String(!expanded));
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
         });
     }
 
-    // ==================== SKILL BADGES ANIMATION ====================
-    const skillBadges = document.querySelectorAll('.skill-badge');
-    skillBadges.forEach((badge, index) => {
-        badge.style.opacity = '0';
-        badge.style.transform = 'scale(0.8)';
-        badge.style.animation = `fadeInScale 0.5s ease forwards`;
-        badge.style.animationDelay = `${index * 0.05}s`;
-    });
+    navLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            navLinks.forEach((item) => item.classList.remove("active"));
+            link.classList.add("active");
 
-    // Add animation keyframes
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
+            if (hamburger && navMenu) {
+                hamburger.classList.remove("active");
+                hamburger.setAttribute("aria-expanded", "false");
+                navMenu.classList.remove("active");
             }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // ==================== BUTTON RIPPLE EFFECT ====================
-    const buttons = document.querySelectorAll('.btn, .contact-link');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', function (e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-
-            this.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 600);
         });
     });
 
-    // Add ripple styling
-    const rippleStyle = document.createElement('style');
-    rippleStyle.textContent = `
-        .btn, .contact-link {
-            position: relative;
-            overflow: hidden;
-        }
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: rippleEffect 0.6s ease-out;
-            pointer-events: none;
-        }
-        @keyframes rippleEffect {
-            to {
-                transform: scale(4);
-                opacity: 0;
+    const setActiveByScroll = () => {
+        const sections = Array.from(document.querySelectorAll("section[id]"));
+        const scrollY = window.scrollY + 140;
+        let currentId = "home";
+
+        sections.forEach((section) => {
+            if (scrollY >= section.offsetTop) {
+                currentId = section.id;
             }
-        }
-    `;
-    document.head.appendChild(rippleStyle);
-
-    // ==================== EXPERIENCE CARDS STAGGER ====================
-    const experienceCards = document.querySelectorAll('.experience-card');
-    experienceCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = `all 0.6s ease ${index * 0.1}s`;
-        
-        setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 50);
-    });
-
-    // ==================== SCROLL PROGRESS INDICATOR ====================
-    const createProgressBar = () => {
-        const progress = document.createElement('div');
-        progress.style.position = 'fixed';
-        progress.style.top = '0';
-        progress.style.left = '0';
-        progress.style.height = '3px';
-        progress.style.background = 'linear-gradient(90deg, rgb(59, 130, 246), rgb(14, 165, 233))';
-        progress.style.zIndex = '999';
-        progress.style.width = '0%';
-        progress.style.transition = 'width 0.2s ease';
-        document.body.appendChild(progress);
-
-        window.addEventListener('scroll', () => {
-            const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrolled = (window.scrollY / windowHeight) * 100;
-            progress.style.width = scrolled + '%';
         });
-    };
-    createProgressBar();
 
-    // ==================== FORM SUBMISSION HANDLING ====================
-    // Example: if you add a contact form later
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form would be submitted here');
+        navLinks.forEach((link) => {
+            const href = link.getAttribute("href") || "";
+            link.classList.toggle("active", href === `#${currentId}`);
+        });
+
+        if (navbar) {
+            navbar.classList.toggle("scrolled", window.scrollY > 20);
+        }
     };
 
-    // ==================== PERFORMANCE: Lazy load animations ====================
-    const lazyElements = document.querySelectorAll('[data-lazy]');
-    const lazyObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('loaded');
-                lazyObserver.unobserve(entry.target);
+    window.addEventListener("scroll", setActiveByScroll);
+    setActiveByScroll();
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (event) => {
+            const targetId = anchor.getAttribute("href");
+            if (!targetId || targetId === "#") {
+                return;
             }
+
+            const target = document.querySelector(targetId);
+            if (!target) {
+                return;
+            }
+
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
         });
     });
-    lazyElements.forEach(el => lazyObserver.observe(el));
 
-    // ==================== KEYBOARD NAVIGATION ====================
-    document.addEventListener('keydown', (e) => {
-        // Close menu with Escape
-        if (e.key === 'Escape') {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && hamburger && navMenu) {
+            hamburger.classList.remove("active");
+            hamburger.setAttribute("aria-expanded", "false");
+            navMenu.classList.remove("active");
         }
     });
-
-    console.log('Portfolio loaded successfully! 🚀');
 });
-
-// ==================== UTILITY FUNCTIONS ====================
-
-// Throttle function for scroll events
-function throttle(func, limit) {
-    let inThrottle;
-    return function () {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    }
-}
-
-// Debounce function for resize events
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    }
-}
-
-// Detect mobile device
-function isMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
-// Get viewport height
-function getViewportHeight() {
-    return Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-}
-
-// Animate number counter (useful for stats)
-function animateCounter(element, target, duration = 2000) {
-    let current = 0;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, 16);
-}
-
-// Copy to clipboard
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        console.log('Copied to clipboard!');
-    }).catch(err => {
-        console.error('Could not copy text: ', err);
-    });
-}
-
-// Get element's position relative to viewport
-function getElementOffset(element) {
-    const rect = element.getBoundingClientRect();
-    return {
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX,
-        bottom: rect.bottom + window.scrollY,
-        right: rect.right + window.scrollX
-    };
-}
